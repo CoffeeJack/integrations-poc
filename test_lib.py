@@ -2,13 +2,13 @@
 
 import pytest
 import dataclasses
-from . import entities
+from integrations import lib
 
 
 @pytest.fixture
 def House():
     @dataclasses.dataclass(eq=False, frozen=True)
-    class House(entities.SyncEntity):
+    class House(lib.SyncEntity):
         size: int
         beds: int
         baths: int

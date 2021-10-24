@@ -3,23 +3,23 @@
 import pytest
 import typing
 import dataclasses
-from integrations.backends import entities
-from integrations.backends import graph
+from integrations import lib
+from integrations import graph
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Appliance(entities.SyncEntity):
+class Appliance(lib.SyncEntity):
     name: str
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Window(entities.SyncEntity):
+class Window(lib.SyncEntity):
     width: int
     height: int
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Room(entities.SyncEntity):
+class Room(lib.SyncEntity):
     name: str
     windows: typing.List[Window]
     appliance: typing.Optional[Appliance]
@@ -27,7 +27,7 @@ class Room(entities.SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class House(entities.SyncEntity):
+class House(lib.SyncEntity):
     name: str
     rooms: typing.List[Room]
     appliances: typing.List[Appliance]

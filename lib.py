@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
+import abc
+import enum
 import random
 import typing
 import string
 import threading
+import dataclasses
 
 
 class DatastoreException(Exception):
@@ -91,3 +94,88 @@ class Datastore:
         self.__lock.acquire()
         self.__storage = {}
         self.__lock.release()
+
+
+ORM = typing.TypeVar("ORM")
+
+
+@dataclasses.dataclass(frozen=True)
+class SyncEntity:
+    """
+    This is an interface for "syncable" entities. It should be implemented for
+    each model that needs to be synced with an external system.
+    """
+
+    local_id: int
+    remote_id: typing.Optional[str]
+
+    def __eq__(self, other):
+        return (
+            type(self).__name__ == type(other).__name__
+            and self.local_id == other.local_id
+        )
+
+    def serialize(self):
+        """Produces data that is ready to be sent to the remote system."""
+
+        return dataclasses.asdict(self)
+
+    @classmethod
+    def deserialize(cls, data):
+        """Accepts data from the remote system and instantiates a SyncEntity."""
+
+        return cls(**data)
+
+    def to_local(cls) -> ORM:
+        """Create a local entity from instance of SyncEntity."""
+        raise NotImplementedError()
+
+    @classmethod
+    def from_local(cls, model: ORM) -> "SyncEntity":
+        """Accepts serialized data from the local entity. This needs to be
+        implemented on a per remote entity basis."""
+        raise NotImplementedError()
+
+
+class SyncStatus(enum.Enum):
+    CREATED = 0
+    IN_PROGRESS = 1
+    COMPLETED = 2
+    ERROR = 3
+
+
+@dataclasses.dataclass
+class SyncResult:
+    status: SyncStatus
+    message: str
+
+
+@dataclasses.dataclass
+class Mapping:
+    local_remote_entity: typing.Dict[type, type]
+    readonly_entity_lookup: typing.Dict[type, str]
+    entity_endpoint: typing.Dict[type, str]
+    entity_datastore: typing.Dict[type, Datastore]
+
+
+@dataclasses.dataclass(frozen=True)
+class Response:
+    status: int
+    body: typing.Union[str, dict]
+
+
+class Client(abc.ABC):
+    def __init__(self, endpoint: str):
+        self.endpoint = endpoint
+
+    @abc.abstractmethod
+    def send(self, body) -> Response:
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def retrieve(self, key) -> Response:
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def search(self, key, value) -> Response:
+        raise NotImplementedError()

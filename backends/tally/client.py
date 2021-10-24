@@ -1,44 +1,42 @@
 #!/usr/bin/env python3
 import typing
-from integrations.backends import client
+from integrations import lib
 from integrations.backends.tally import server
-from integrations.backends.tally import entities
-from integrations.backends.tally import database
 from integrations.backends.tally import mapping
 
 
-class Client(client.Client):
-    def send(self, body) -> client.Response:
+class Client(lib.Client):
+    def send(self, body) -> lib.Response:
         status, _body = server.handle_request(
             method="POST",
             route=self.endpoint,
             body=body,
         )
-        response = client.Response(status=status, body=_body)
+        response = lib.Response(status=status, body=_body)
         return response
 
-    def retrieve(self, key) -> client.Response:
+    def retrieve(self, key) -> lib.Response:
         status, body = server.handle_request(
             method="GET", route=f"{self.endpoint}/{key}"
         )
-        response = client.Response(status=status, body=body)
+        response = lib.Response(status=status, body=body)
         return response
 
-    def search(self, key: str, value: str) -> client.Response:
+    def search(self, key: str, value: str) -> lib.Response:
         status, body = server.handle_request(
             method="GET", route=f"{self.endpoint}/?{key}={value}"
         )
-        response = client.Response(status=status, body=body)
+        response = lib.Response(status=status, body=body)
         return response
 
 
-def generate_client(entity_class: typing.Type[entities.SyncEntity]):
+def generate_client(entity_class: typing.Type[lib.SyncEntity]):
     return Client(
         endpoint=mapping.entity_endpoint[entity_class],
     )
 
 
-def sync(entity: entities.SyncEntity, force=False):
+def sync(entity: lib.SyncEntity, force=False):
     """
     Q: What does it mean for an object to be synced?
     A: If entities' ObjectMapStore contains a mapping of local_id to remote_id,

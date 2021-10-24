@@ -1,9 +1,11 @@
+from integrations import lib
+from integrations import graph
 from integrations import entities as local_entities
-from integrations.backends.mapping import Mapping
 from integrations.backends.tally import entities as remote_entities
 from integrations.backends.tally import database
 
-mapping = Mapping(
+
+mapping = lib.Mapping(
     local_remote_entity={
         local_entities.Currency: remote_entities.Currency,
         local_entities.Location: remote_entities.Location,
@@ -35,3 +37,10 @@ mapping = Mapping(
         remote_entities.VendorBill: database.VendorBillObjectMap,
     },
 )
+
+
+def sync(local_entity):
+    remote_entity_class = mapping.local_remote_entity[type(local_entity)]
+    remote_entity = remote_entity_class.from_local(local_entity)
+
+    graph_node = graph.generate_graph(remote_entity)

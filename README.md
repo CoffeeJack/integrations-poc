@@ -68,11 +68,12 @@ Item
 # Usage
 
 ```python
-from backends import get_backend
+from integrations.backends import get_backend
 
 backend = get_backend("tally")
-entity = backend.create_entity(local_bill_orm_instance)
-backend.sync(entity)
+result = backend.sync(local_entity)
+
+
 ```
 
 # Components

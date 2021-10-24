@@ -2,12 +2,12 @@
 import typing
 import dataclasses
 
-from integrations.backends.entities import SyncEntity
+from integrations import lib
 from integrations.backends.tally import database
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Currency(SyncEntity):
+class Currency(lib.SyncEntity):
     name: str
     iso_code: str
 
@@ -22,7 +22,7 @@ class Currency(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Location(SyncEntity):
+class Location(lib.SyncEntity):
     name: str
 
     @classmethod
@@ -35,7 +35,7 @@ class Location(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Department(SyncEntity):
+class Department(lib.SyncEntity):
     name: str
 
     @classmethod
@@ -48,7 +48,7 @@ class Department(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class ChartOfAccounts(SyncEntity):
+class ChartOfAccounts(lib.SyncEntity):
     number: str
     name: str
 
@@ -66,7 +66,7 @@ class ChartOfAccounts(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Vendor(SyncEntity):
+class Vendor(lib.SyncEntity):
     name: str
     location: Location
 
@@ -86,7 +86,7 @@ class Vendor(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class Item(SyncEntity):
+class Item(lib.SyncEntity):
     description: str
     quantity: int
     rate: int
@@ -116,7 +116,7 @@ class Item(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class VendorBill(SyncEntity):
+class VendorBill(lib.SyncEntity):
     invoice: str
     account: ChartOfAccounts
     vendor: Vendor
@@ -155,7 +155,7 @@ class VendorBill(SyncEntity):
 
 
 @dataclasses.dataclass(eq=False, frozen=True)
-class BillCollection(SyncEntity):
+class BillCollection(lib.SyncEntity):
     """Only used as a container of bills. Does not refer to an entity in the
     remote system.
     """

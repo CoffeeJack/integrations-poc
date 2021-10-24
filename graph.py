@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import typing
-from integrations.backends import entities
+from integrations import lib
 
 
 class Node:
     def __init__(
         self,
-        entity: entities.SyncEntity,
+        entity: lib.SyncEntity,
         deps: typing.Optional[typing.List["Node"]] = None,
     ):
         self.entity = entity
@@ -26,7 +26,7 @@ class Node:
         self.is_visited = True
 
 
-def generate_graph(root: entities.SyncEntity, cache=None):
+def generate_graph(root: lib.SyncEntity, cache=None):
     if cache is None:
         cache = {}
 
@@ -48,7 +48,7 @@ def generate_graph(root: entities.SyncEntity, cache=None):
             if item is not None:
                 dep = generate_graph(item, cache)
                 node.add_dependency(dep)
-        elif issubclass(field.type, entities.SyncEntity):
+        elif issubclass(field.type, lib.SyncEntity):
             # Base case
             dep = generate_graph(getattr(root, field_name), cache)
             node.add_dependency(dep)

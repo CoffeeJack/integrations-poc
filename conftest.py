@@ -3,8 +3,8 @@
 import string
 import random
 import pytest
-from . import database
-from . import entities
+from integrations import database
+from integrations import entities
 
 
 def random_id():
@@ -29,8 +29,8 @@ def reset_datastores():
     database.BillStore.reset()
 
 
-# Fixtures for read-only entities need to deterministic since
-# we'll need to match them with the remote system
+# Fixtures for read-only entities need to be deterministic because
+# we'll need to match them with the remote system.
 
 
 @pytest.fixture
