@@ -4,51 +4,52 @@ import dataclasses
 
 
 @dataclasses.dataclass(frozen=True)
-class Currency:
+class BaseEntity:
     id: int
+
+    def __str__(self):
+        return f"<{type(self).__name__} id={self.id}>"
+
+
+@dataclasses.dataclass(frozen=True)
+class Currency(BaseEntity):
     name: str
     rate: float
 
 
 @dataclasses.dataclass(frozen=True)
-class Location:
-    id: str
+class Location(BaseEntity):
     name: str
     localCurrency: Currency
 
 
 @dataclasses.dataclass(frozen=True)
-class Department:
-    id: str
+class Department(BaseEntity):
     name: str
     branch: Location
 
 
 @dataclasses.dataclass(frozen=True)
-class AccountCode:
-    id: int
+class AccountCode(BaseEntity):
     code: str
     description: str
 
 
 @dataclasses.dataclass(frozen=True)
-class Account:
-    id: int
+class Account(BaseEntity):
     account_code: AccountCode
     department: Department
 
 
 @dataclasses.dataclass(frozen=True)
-class Vendor:
-    id: int
+class Vendor(BaseEntity):
     name: str
     currency: Currency
     location: Location
 
 
 @dataclasses.dataclass(frozen=True)
-class Item:
-    id: int
+class Item(BaseEntity):
     account: Account
     description: str
     quantity: int
@@ -61,8 +62,7 @@ class Item:
 
 
 @dataclasses.dataclass(frozen=True)
-class Bill:
-    id: int
+class Bill(BaseEntity):
     invoice_number: str
     vendor: Vendor
     currency: Currency

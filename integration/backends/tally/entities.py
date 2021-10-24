@@ -13,9 +13,10 @@ class Currency(lib.SyncEntity):
 
     @classmethod
     def from_local(cls, orm):
+        object_map = database.CurrencyObjectMap.retrieve(orm.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.CurrencyObjectMap.retrieve(orm.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             name=orm.name,
             iso_code=orm.name,
         )
@@ -27,9 +28,10 @@ class Location(lib.SyncEntity):
 
     @classmethod
     def from_local(cls, orm):
+        object_map = database.LocationObjectMap.retrieve(orm.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.LocationObjectMap.retrieve(orm.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             name=orm.name,
         )
 
@@ -40,9 +42,10 @@ class Department(lib.SyncEntity):
 
     @classmethod
     def from_local(cls, orm):
+        object_map = database.DepartmentObjectMap.retrieve(orm.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.DepartmentObjectMap.retrieve(orm.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             name=orm.name,
         )
 
@@ -57,9 +60,10 @@ class ChartOfAccounts(lib.SyncEntity):
         # Just for fun, we'll be passing an Account instance instead of
         # AccountCode. Account is more commonly used in the codebase than
         # AccountCode.
+        object_map = database.AccountCodeObjectMap.retrieve(orm.account_code.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.AccountCodeObjectMap.retrieve(orm.account_code.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             number=orm.account_code.code,
             name=orm.account_code.description,
         )
@@ -77,9 +81,10 @@ class Vendor(lib.SyncEntity):
 
     @classmethod
     def from_local(cls, orm):
+        object_map = database.VendorObjectMap.retrieve(orm.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.VendorObjectMap.retrieve(orm.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             name=orm.name,
             location=Location.from_local(orm.location),
         )
@@ -141,9 +146,10 @@ class VendorBill(lib.SyncEntity):
 
     @classmethod
     def from_local(cls, orm):
+        object_map = database.VendorBillObjectMap.retrieve(orm.id)
         return cls(
             local_id=orm.id,
-            remote_id=database.VendorBillObjectMap.retrieve(orm.id),
+            remote_id=object_map.get("remote_id") if object_map is not None else None,
             invoice=orm.invoice_number,
             account=ChartOfAccounts.from_local(orm.items[0].account),
             vendor=Vendor.from_local(orm.vendor),

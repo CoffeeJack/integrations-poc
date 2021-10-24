@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import random
-from . import client
+from . import generate_client, sync
 from . import entities
 from . import database
 from . import server
@@ -9,7 +9,7 @@ from . import server
 
 class TestClient:
     def test_can_send(self, locations_datastore):
-        _client = client.generate_client(entity_class=entities.Vendor)
+        _client = generate_client(entity_class=entities.Vendor)
         response = _client.send(
             {
                 "name": "Staples",
@@ -21,14 +21,14 @@ class TestClient:
 
     def test_can_retrieve(self, locations_datastore):
         _location_key = locations_datastore[1]
-        _client = client.generate_client(entity_class=entities.Location)
+        _client = generate_client(entity_class=entities.Location)
         response = _client.retrieve(_location_key)
         assert response.status == 200
         assert isinstance(response.body, dict)
         assert response.body["id"] == _location_key
 
     def test_can_search(self, locations_datastore):
-        _client = client.generate_client(entity_class=entities.Location)
+        _client = generate_client(entity_class=entities.Location)
         response = _client.search(key="name", value="Toronto")
         assert response.status == 200
         assert isinstance(response.body, dict)
@@ -48,7 +48,7 @@ class TestSync:
             iso_code="CAD",
         )
 
-        client.sync(currency)
+        result = sync(currency)
 
         # Check that object map has new mapping
         assert len(database.CurrencyObjectMap.retrieve()) == 1
@@ -76,7 +76,7 @@ class TestSync:
             local_id=1, remote_id=None, name="Juice Bar", location=location
         )
 
-        client.sync(vendor)
+        result = sync(vendor)
 
         assert len(database.VendorObjectMap.retrieve()) == 1
         assert len(server.VendorStore.retrieve()) == 1

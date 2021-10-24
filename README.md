@@ -73,6 +73,25 @@ from integration.services import sync
 result = sync(entity=local_entity, backend='tally')
 ```
 
+# Demo
+
+```sh
+(integration) ➜  integration git:(main) ✗ SLOWMO=1 python demo.py
+Running Demo 1:
+SyncResult(status=<SyncStatus.CREATED: 0>, message="Sync created for '<Currency local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.IN_PROGRESS: 1>, message="Sync in progress for '<Currency local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.COMPLETED: 2>, message='Entity synced successfully.')
+Result = <Currency local_id=1 remote_id=y961l2>
+Running Demo 2:
+SyncResult(status=<SyncStatus.CREATED: 0>, message="Sync created for '<Location local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.IN_PROGRESS: 1>, message="Sync in progress for '<Location local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.COMPLETED: 2>, message='Entity synced successfully.')
+SyncResult(status=<SyncStatus.CREATED: 0>, message="Sync created for '<Vendor local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.IN_PROGRESS: 1>, message="Sync in progress for '<Vendor local_id=1 remote_id=None>'")
+SyncResult(status=<SyncStatus.COMPLETED: 2>, message='Entity synced successfully.')
+Result = <Vendor local_id=1 remote_id=x8huc8>
+```
+
 # Components
 
 There are three main components:
@@ -81,5 +100,3 @@ There are three main components:
 - Graph: Represented as adjacency list this module contains function to generate
   graph and traverse it using depth first search.
 - Remote: This is essential a stub simulating the remote system.
-
-See `main.py` for example usage.

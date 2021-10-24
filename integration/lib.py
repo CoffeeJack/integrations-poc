@@ -63,6 +63,7 @@ class Datastore:
                     f"Key '{key}' does not exist in {self.name} datastore."
                 )
             return None
+
         if not self.__lock.locked():
             return self.__storage.get(key)
 
@@ -114,6 +115,9 @@ class SyncEntity:
             type(self).__name__ == type(other).__name__
             and self.local_id == other.local_id
         )
+
+    def __str__(self):
+        return f"<{type(self).__name__} local_id={self.local_id} remote_id={self.remote_id}>"
 
     def serialize(self):
         """Produces data that is ready to be sent to the remote system."""
