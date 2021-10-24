@@ -4,6 +4,7 @@ from integrations.backends import client
 from integrations.backends.tally import server
 from integrations.backends.tally import entities
 from integrations.backends.tally import database
+from integrations.backends.tally import mapping
 
 
 class Client(client.Client):
@@ -31,28 +32,9 @@ class Client(client.Client):
         return response
 
 
-# Mapping of entity class and remote endpoint
-entity_endpoint_mapping: typing.Dict[typing.Type[entities.SyncEntity], str] = {
-    entities.Currency: "/currencies",
-    entities.Location: "/locations",
-    entities.Department: "/departments",
-    entities.ChartOfAccounts: "/coa",
-    entities.Vendor: "/vendors",
-    entities.VendorBill: "/vendorbills",
-}
-
-# Mapping of entity class and key to use when looking up remote instance
-readonly_entities = {
-    entities.Currency: "iso_code",
-    entities.Location: "name",
-    entities.Department: "name",
-    entities.ChartOfAccounts: "number",
-}
-
-
 def generate_client(entity_class: typing.Type[entities.SyncEntity]):
     return Client(
-        endpoint=entity_endpoint_mapping[entity_class],
+        endpoint=mapping.entity_endpoint[entity_class],
     )
 
 
@@ -64,7 +46,7 @@ def sync(entity: entities.SyncEntity, force=False):
     """
 
     entity_class = type(entity)
-    object_map = database.entity_datastore_mapping[entity_class]
+    object_map = mapping.entity_datastore[entity_class]
 
     if entity.remote_id is not None:
         # There must be an objectmap for this. If not, something is fucky.
@@ -81,8 +63,8 @@ def sync(entity: entities.SyncEntity, force=False):
     # Special handling for readonly entities. We can't just push them to the
     # remote system. We need to lookup object in the remote system and store
     # the remote_id in the ObjectMap store.
-    if entity_class in readonly_entities:
-        lookup_key = readonly_entities[entity_class]
+    if entity_class in mapping.readonly_entity_lookup:
+        lookup_key = mapping.readonly_entity_lookup[entity_class]
         response = remote_client.search(
             key=lookup_key, value=getattr(entity, lookup_key)
         )

@@ -2,7 +2,6 @@
 
 import string
 from integrations import lib
-from integrations.backends.tally import entities
 
 # This is a simulation of ObjectMap per integration backend.
 
@@ -75,13 +74,3 @@ VendorBillObjectMap = lib.Datastore(
     pk="local_id",
     keyspace=string.digits,
 )
-
-
-entity_datastore_mapping = {
-    entities.Currency: CurrencyObjectMap,
-    entities.Location: LocationObjectMap,
-    entities.Department: DepartmentObjectMap,
-    entities.ChartOfAccounts: AccountCodeObjectMap,
-    entities.Vendor: VendorObjectMap,
-    entities.VendorBill: VendorBillObjectMap,
-}
