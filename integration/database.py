@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import string
-from integrations import lib
-from integrations import entities
+from integration import lib
+from integration import entities
 
 # This is a simulation of local database.
 

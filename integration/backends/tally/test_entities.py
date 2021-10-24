@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from integrations import graph
-from integrations.backends.tally import entities
+from integration import graph
+from integration.backends.tally import entities
 
 
 class TestEntity:

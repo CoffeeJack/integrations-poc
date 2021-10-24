@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import typing
-from integrations import lib
-from integrations.backends.tally import server
-from integrations.backends.tally import mapping
+from integration import lib
+from integration.backends.tally import server
+from integration.backends.tally import mapping
 
 
 class Client(lib.Client):

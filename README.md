@@ -68,12 +68,9 @@ Item
 # Usage
 
 ```python
-from integrations.backends import get_backend
+from integration.services import sync
 
-backend = get_backend("tally")
-result = backend.sync(local_entity)
-
-
+result = sync(entity=local_entity, backend='tally')
 ```
 
 # Components

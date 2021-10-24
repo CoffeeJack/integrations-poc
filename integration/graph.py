@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import typing
-from integrations import lib
+from integration import lib
 
 
 class Node:

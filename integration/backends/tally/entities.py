@@ -2,8 +2,8 @@
 import typing
 import dataclasses
 
-from integrations import lib
-from integrations.backends.tally import database
+from integration import lib
+from integration.backends.tally import database
 
 
 @dataclasses.dataclass(eq=False, frozen=True)

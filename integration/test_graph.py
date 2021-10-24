@@ -3,8 +3,8 @@
 import pytest
 import typing
 import dataclasses
-from integrations import lib
-from integrations import graph
+from integration import lib
+from integration import graph
 
 
 @dataclasses.dataclass(eq=False, frozen=True)

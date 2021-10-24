@@ -6,7 +6,7 @@ import typing
 import dataclasses
 from urllib import parse
 
-from integrations import lib
+from integration import lib
 
 
 __all__ = ["handle_request"]

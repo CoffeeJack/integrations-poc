@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import string
-from integrations import lib
+from integration import lib
 
 # This is a simulation of ObjectMap per integration backend.
 

@@ -1,8 +1,8 @@
-from integrations import lib
-from integrations import graph
-from integrations import entities as local_entities
-from integrations.backends.tally import entities as remote_entities
-from integrations.backends.tally import database
+from integration import lib
+from integration import graph
+from integration import entities as local_entities
+from integration.backends.tally import entities as remote_entities
+from integration.backends.tally import database
 
 
 mapping = lib.Mapping(

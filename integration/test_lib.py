@@ -2,7 +2,7 @@
 
 import pytest
 import dataclasses
-from integrations import lib
+from integration import lib
 
 
 @pytest.fixture

@@ -3,8 +3,8 @@
 import string
 import random
 import pytest
-from integrations import database
-from integrations import entities
+from integration import database
+from integration import entities
 
 
 def random_id():
