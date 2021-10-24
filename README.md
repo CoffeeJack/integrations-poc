@@ -3,6 +3,17 @@
 This is proof-of-concept project that demonstrates usage of a directed graph to
 resolve dependencies and sync with a remote systems.
 
+# Definitions
+
+- Local system: System that needs to sync it's object.
+- Remote system: System we need to sync objects with.
+- Sync: Ability to maintain reference to object in the remote system.
+
+# Problem Statement
+
+> Given an object that exists in local system, we need the ability to sync it
+> with a remote system along with its dependencies.
+
 For this demo, `tally` is an accounting system we need to integrate with. It
 supports the following objects:
 
@@ -63,6 +74,31 @@ Item (Only synced via Vendor Bill)
 | quantity    | int    |
 | rate        | int    |
 | total       | int    |
+
+# Structure
+
+Relevant code files:
+
+```sh
+.
+├── demo.py
+└── integration
+    ├── __init__.py
+    ├── backends
+    │   ├── __init__.py             - Allows fetching the given backend.
+    │   └── tally
+    │       ├── __init__.py
+    │       ├── client.py           - Frontend to the remote system.
+    │       ├── database.py         - Storage of local -> remote references.
+    │       ├── entities.py         - Acceptable entities by the remote system.
+    │       └── server.py           - Fake implementation of the remote system.
+    ├── conftest.py
+    ├── database.py                 - Database that stores local entities.
+    ├── entities.py                 - Entities as defined in the local system.
+    ├── graph.py                    - Generates and traverses dependency graph
+    ├── lib.py                      - Shared components
+    └── services.py                 - Entrypoint for the integrations.
+```
 
 # Usage
 
