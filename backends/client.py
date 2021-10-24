@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import abc
+import typing
 import dataclasses
 
 
 @dataclasses.dataclass(frozen=True)
 class Response:
     status: int
-    body: dict
+    body: typing.Union[str, dict]
 
 
 class Client(abc.ABC):
@@ -20,4 +21,8 @@ class Client(abc.ABC):
 
     @abc.abstractmethod
     def retrieve(self, key) -> Response:
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def search(self, key, value) -> Response:
         raise NotImplementedError()

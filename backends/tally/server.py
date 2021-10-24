@@ -17,9 +17,31 @@ __all__ = ["handle_request"]
 ############
 
 
-CurrencyStore = lib.Datastore(name="Currency", fields=("id", "name", "iso_code"))
-LocationStore = lib.Datastore(name="Location", fields=("id", "name"))
-DepartmentStore = lib.Datastore(name="Department", fields=("id", "name"))
+CurrencyStore = lib.Datastore(
+    name="Currency",
+    fields=(
+        "id",
+        "name",
+        "iso_code",
+    ),
+)
+
+LocationStore = lib.Datastore(
+    name="Location",
+    fields=(
+        "id",
+        "name",
+    ),
+)
+
+DepartmentStore = lib.Datastore(
+    name="Department",
+    fields=(
+        "id",
+        "name",
+    ),
+)
+
 ChartOfAccountsStore = lib.Datastore(
     name="Chart of Accounts",
     fields=(
@@ -28,7 +50,16 @@ ChartOfAccountsStore = lib.Datastore(
         "name",
     ),
 )
-VendorStore = lib.Datastore(name="Vendor", fields=("id", "name"))
+
+VendorStore = lib.Datastore(
+    name="Vendor",
+    fields=(
+        "id",
+        "name",
+        "location_id",
+    ),
+)
+
 VendorBillStore = lib.Datastore(
     name="Vendor Bill",
     fields=(
