@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import typing
-from integrations import logger
 from integrations.backends import entities
 
 
@@ -23,14 +22,8 @@ class Node:
 
     def visit(self):
         if self.is_visited:
-            logger.debug(f"Already synced {self}.")
             return
-
         self.is_visited = True
-        logger.debug(f"Syncing {self}.")
-
-        # This is where the magic happens or supposed to happen
-        # client.sync(self.entity)
 
 
 def generate_graph(root: entities.SyncEntity, cache=None):
@@ -44,21 +37,34 @@ def generate_graph(root: entities.SyncEntity, cache=None):
         cache[node.entity] = node
 
     for field_name, field in root.__dataclass_fields__.items():
-        if hasattr(field.type, "__origin__"):
-            if field.type.__origin__ is list:
-                for item in getattr(root, field_name):
-                    dep = generate_graph(item, cache)
-                    node.add_dependency(dep)
+        if typing.get_origin(field.type) is list:
+            # Handle list of dependenecies
+            for item in getattr(root, field_name):
+                dep = generate_graph(item, cache)
+                node.add_dependency(dep)
+        elif typing.get_origin(field.type) is typing.Union:
+            # Handle optional dependency
+            item = getattr(root, field_name)
+            if item is not None:
+                dep = generate_graph(item, cache)
+                node.add_dependency(dep)
         elif issubclass(field.type, entities.SyncEntity):
+            # Base case
             dep = generate_graph(getattr(root, field_name), cache)
             node.add_dependency(dep)
+
     return node
 
 
-def depth_first_search(node: Node):
-    dependency_resolution = []
+def resolve_dependencies(node: Node):
+    """
+    Run depth first search on the given root of graph and produces a list
+    of entities in the order in which those should be synced.
+    """
+
+    resolution = []
     stack = [node]
-    while len(stack):
+    while stack:
         current = stack.pop(0)
         if current.deps:
             for dep in current.deps:
@@ -66,9 +72,14 @@ def depth_first_search(node: Node):
                     stack.extend(dep)
                 else:
                     stack.append(dep)
+        resolution.append(current)
 
-        dependency_resolution.append(current)
-
-    while dependency_resolution:
-        node = dependency_resolution.pop()
+    unique = []
+    while resolution:
+        node = resolution.pop()
+        if node in unique:
+            continue
         node.visit()
+        unique.append(node)
+
+    return [node.entity for node in unique]

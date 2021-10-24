@@ -24,7 +24,6 @@ class TestEntity:
 class TestGraph:
     def test_can_generate_graph(self, bill):
         sync_entity = entities.VendorBill.from_local(bill)
-
         node = graph.generate_graph(sync_entity)
         assert node
-        breakpoint()
+        assert node.deps
