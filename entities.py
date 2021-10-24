@@ -43,6 +43,7 @@ class Vendor:
     id: int
     name: str
     currency: Currency
+    location: Location
 
 
 @dataclasses.dataclass(frozen=True)
@@ -52,6 +53,7 @@ class Item:
     description: str
     quantity: int
     unit_cost: int
+    currency: Currency
 
     @property
     def total(self):
@@ -60,6 +62,7 @@ class Item:
 
 @dataclasses.dataclass(frozen=True)
 class Bill:
+    id: int
     invoice_number: str
     vendor: Vendor
     currency: Currency

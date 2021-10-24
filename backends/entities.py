@@ -32,12 +32,12 @@ class SyncEntity:
 
         return cls(**data)
 
-    def to_local(cls, model: ORM):
+    def to_local(cls) -> ORM:
         """Create a local entity from instance of SyncEntity."""
         raise NotImplementedError()
 
     @classmethod
-    def from_local(cls, model: ORM):
+    def from_local(cls, model: ORM) -> "SyncEntity":
         """Accepts serialized data from the local entity. This needs to be
         implemented on a per remote entity basis."""
         raise NotImplementedError()

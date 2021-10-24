@@ -67,6 +67,16 @@ Item
 
 # Usage
 
+```python
+from backends import get_backend
+
+backend = get_backend("tally")
+entity = backend.create_entity(local_bill_orm_instance)
+backend.sync(entity)
+```
+
+# Components
+
 There are three main components:
 
 - Entities: These refer to objects that can be synced with a remote system.

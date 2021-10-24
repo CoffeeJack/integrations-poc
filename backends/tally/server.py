@@ -104,7 +104,7 @@ class API:
         else:
             # Search by key/value pair
             records = self.store.retrieve()
-            for _, record in records.items():
+            for record in records:
                 if record.get(key, None) == value:
                     return (200, record)
 

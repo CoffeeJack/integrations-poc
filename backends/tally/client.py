@@ -78,8 +78,9 @@ def sync(entity: entities.SyncEntity, force=False):
 
     remote_client = generate_client(entity_class)
 
-    # Special handling for readonly entities. We need to lookup object in the
-    # remote system and store the remote_id in the ObjectMap store.
+    # Special handling for readonly entities. We can't just push them to the
+    # remote system. We need to lookup object in the remote system and store
+    # the remote_id in the ObjectMap store.
     if entity_class in readonly_entities:
         lookup_key = readonly_entities[entity_class]
         response = remote_client.search(

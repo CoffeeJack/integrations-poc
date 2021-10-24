@@ -30,7 +30,7 @@ class Node:
         logger.debug(f"Syncing {self}.")
 
         # This is where the magic happens or supposed to happen
-        client.sync(self.entity)
+        # client.sync(self.entity)
 
 
 def generate_graph(root: entities.SyncEntity, cache=None):

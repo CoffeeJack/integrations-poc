@@ -49,15 +49,17 @@ class Datastore:
             elif field not in body_fields:
                 raise DatastoreException(f"Required field '{field}' is missing.")
 
-    def retrieve(self, key: typing.Optional[str] = None):
+    def retrieve(self, key: typing.Optional[str] = None, raise_exception=False):
         if key is None:
             if not self.__lock.locked():
-                return self.__storage
+                return list(self.__storage.values())
 
         if key not in self.__storage:
-            raise DatastoreException(
-                f"Key '{key}' does not exist in {self.name} datastore."
-            )
+            if raise_exception:
+                raise DatastoreException(
+                    f"Key '{key}' does not exist in {self.name} datastore."
+                )
+            return None
         if not self.__lock.locked():
             return self.__storage.get(key)
 

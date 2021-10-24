@@ -38,7 +38,7 @@ class TestClient:
 class TestSync:
     def test_can_sync_readonly_entities(self, currencies_datastore):
         # Check object map is empty
-        assert database.CurrencyObjectMap.retrieve() == {}
+        assert database.CurrencyObjectMap.retrieve() == []
 
         # Name is intentially made different from name stored in the remote system
         currency = entities.Currency(
@@ -62,8 +62,8 @@ class TestSync:
     def test_can_sync_entities(self, locations_datastore):
         # Ensure object map is empty and object does not exist in the remote
         # system.
-        assert database.VendorObjectMap.retrieve() == {}
-        assert server.VendorStore.retrieve() == {}
+        assert database.VendorObjectMap.retrieve() == []
+        assert server.VendorStore.retrieve() == []
 
         # This location needs to exist in the remote system. To ensure that, we
         # are relying on locations_datastore. For syncing an entity, its
@@ -77,3 +77,12 @@ class TestSync:
         )
 
         client.sync(vendor)
+
+        assert len(database.VendorObjectMap.retrieve()) == 1
+        assert len(server.VendorStore.retrieve()) == 1
+        assert server.VendorStore.retrieve()[0]["name"] == "Juice Bar"
+
+        local_vendor = database.VendorObjectMap.retrieve()[0]
+        remote_vendor = server.VendorStore.retrieve()[0]
+
+        assert local_vendor["remote_id"] == remote_vendor["id"]
