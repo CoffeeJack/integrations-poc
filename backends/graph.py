@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import typing
 from integrations import logger
-from integrations import client
-from integrations import entities
+from integrations.backends import entities
 
 
 class Node:
