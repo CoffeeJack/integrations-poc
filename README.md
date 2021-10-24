@@ -3,13 +3,13 @@
 This is proof-of-concept project that demonstrates usage of a directed graph to
 resolve dependencies and sync with a remote systems.
 
-# Definitions
+## Definitions
 
 - Local system: System that needs to sync it's object.
 - Remote system: System we need to sync objects with.
 - Sync: Ability to maintain reference to object in the remote system.
 
-# Problem Statement
+## Problem Statement
 
 > Given an object that exists in local system, we need the ability to sync it
 > with a remote system along with its dependencies.
@@ -75,7 +75,7 @@ Item (Only synced via Vendor Bill)
 | rate        | int    |
 | total       | int    |
 
-# Structure
+## Structure
 
 Relevant code files:
 
@@ -100,7 +100,7 @@ Relevant code files:
     └── services.py                 - Entrypoint for the integrations.
 ```
 
-# Usage
+## Usage
 
 ```python
 from integration.services import sync
@@ -108,7 +108,7 @@ from integration.services import sync
 result = sync(entity=local_entity, backend='tally')
 ```
 
-# Demo
+## Demo
 
 **Demo 1**
 
@@ -148,7 +148,7 @@ SyncResult(status=<SyncStatus.COMPLETED: 2>, message='Entity synced successfully
 Result = <Vendor local_id=1 remote_id=x8huc8>
 ```
 
-# Testing
+## Testing
 
 You'll need `pytest` to be able to run tests. To setup testing environment:
 
